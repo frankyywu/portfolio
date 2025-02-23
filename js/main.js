@@ -128,17 +128,22 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetId = button.getAttribute('aria-controls');
             const target = document.getElementById(targetId);
             
+            // 先关闭所有面板
+            this.buttons.forEach(btn => {
+                if (btn !== button) {
+                    this.closePanel(btn);
+                }
+            });
+            
             button.setAttribute('aria-expanded', 'true');
             target.style.display = 'block';
             
-            // 需要给浏览器一个重排的机会
             requestAnimationFrame(() => {
                 target.style.opacity = '1';
                 target.style.transform = 'translateY(0)';
                 target.setAttribute('aria-expanded', 'true');
             });
             
-            // 设置动画延迟
             this.setAnimationDelays(target);
         },
 
@@ -299,9 +304,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             // 允许页面滚动
                             document.body.style.overflow = 'auto';
                         } else {
-                            // 恢复之前的状态
-                            this.velocity = this.savedVelocity || this.baseSpeed;
-                            this.direction = this.savedDirection || -1;
+                            // 恢复之前的状态，但保持当前方向
+                            this.velocity = Math.abs(this.savedVelocity || this.baseSpeed) * this.direction;
                             this.isScrolling = true;
                             // 重新禁用页面滚动
                             document.body.style.overflow = 'hidden';
@@ -323,4 +327,21 @@ document.addEventListener('DOMContentLoaded', () => {
     accordion.init();
     contactForm.init();
     scroller.init();
+
+    document.querySelectorAll('.accordion-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const accordionItem = button.parentElement;
+            const isActive = accordionItem.classList.contains('active');
+            
+            // 关闭所有其他项
+            document.querySelectorAll('.accordion-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 如果当前项未激活，则激活它
+            if (!isActive) {
+                accordionItem.classList.add('active');
+            }
+        });
+    });
 }); 
