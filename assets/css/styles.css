@@ -90,15 +90,54 @@ img {
 }
 
 /*=============== THEME ===============*/
-
+.theme-button {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 2.5rem;
+  font-size: 1.25rem;
+  padding: .5rem;
+  border-radius: .5rem;
+  z-index: var(--z-fixed);
+  cursor: pointer;
+  background-color: var(--container-color);
+  color: var(--title-color);
+}
 
 /*========== Variables Dark theme ==========*/
-
+body.dark-theme {
+  --first-color: hsl(14, 80%, 50%);
+  --black-color: hsl(0, 0%, 18%);
+  --black-color-light: hsl(0, 0%, 30%);
+  --title-color: hsl(0, 0%, 95%);
+  --text-color: hsl(0, 0%, 70%);
+  --body-color: hsl(0, 0%, 8%);
+  --container-color: hsl(0, 0%, 12%);
+}
 
 /*========== 
 	Color changes in some parts of 
 	the website, in dark theme
 ==========*/
+.dark-theme .nav__menu {
+  background-color: var(--container-color);
+}
+
+.dark-theme .nav__logo-circle,
+.dark-theme .nav__toggle {
+  color: var(--white-color);
+}
+
+.dark-theme::-webkit-scrollbar {
+  background-color: hsl(0, 0%, 20%);
+}
+
+.dark-theme::-webkit-scrollbar-thumb {
+  background-color: hsl(0, 0%, 30%);
+}
+
+.dark-theme::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(0, 0%, 40%);
+}
 
 
 /*=============== REUSABLE CSS CLASSES ===============*/
@@ -481,9 +520,48 @@ img {
 
 
 /* Animate scroll icon */
+@keyframes scroll-down {
+  0% {
+    transform: translateY(-1rem);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(.6rem);
+    opacity: 0;
+  }
+}
 
+.home__scroll-text {
+  animation: scroll-down 2s infinite;
+}
 
 /*=============== BUTTON ===============*/
+.scrollup {
+  position: fixed;
+  right: 1rem;
+  bottom: -50%;
+  background-color: var(--first-color);
+  display: inline-flex;
+  padding: .5rem;
+  border-radius: .5rem;
+  font-size: 1.25rem;
+  color: var(--white-color);
+  z-index: var(--z-tooltip);
+  transition: bottom .3s, transform .3s;
+}
+
+.scrollup:hover {
+  transform: translateY(-.25rem);
+}
+
+/* Show Scroll Up */
+.show-scroll {
+  bottom: 3rem;
+}
 
 
 /*=============== ABOUT ===============*/
