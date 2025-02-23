@@ -300,14 +300,16 @@ document.addEventListener('DOMContentLoaded', () => {
                             // 保存当前状态
                             this.savedVelocity = this.velocity;
                             this.isScrolling = false;
-                            // 允许页面滚动
-                            document.body.style.overflow = 'auto';
+                            // 允许页面滚动，但只在展开的内容区域
+                            document.body.style.overflow = '';  // 移除 'hidden'，允许滚动
+                            document.documentElement.style.overflow = '';  // 确保 html 元素也可以滚动
                         } else {
                             // 恢复速度但保持当前方向
                             this.velocity = Math.abs(this.savedVelocity || this.baseSpeed) * this.direction;
                             this.isScrolling = true;
                             // 重新禁用页面滚动
                             document.body.style.overflow = 'hidden';
+                            document.documentElement.style.overflow = 'hidden';
                         }
                     }
                 });
