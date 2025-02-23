@@ -140,31 +140,34 @@ body.dark .nav-logo span {
 body.dark .nav-link {
     color: rgb(255, 255, 255);
 }
-
 .nav-menu-btn {
     display: none;
+    margin-right: 20px;
 }
 
+@media screen and (max-width: 1150px) {
+    .nav-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+    }
+}
 .nav-menu-btn i {
     font-size: 28px;
     cursor: pointer;
 }
-
 .active-link {
     position: relative;
     color: var(--first-color);
     transition: 0.3s;
 }
-
-body.dark .active-link {
-    color: var(--first-color);
-}
-
 .mode {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     gap: 10px;
+    margin-left: auto;
 }
 
 .moon-sun {
@@ -172,35 +175,25 @@ body.dark .active-link {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 40px;
-    width: 40px;
-    background: #e7e7e7;
-    border-radius: 50%;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: background 0.3s ease;
 }
 .moon-sun:hover{
     background: var(--first-color);
 }
-
 .moon-sun :is(#moon, #sun) {
     position: absolute;
     color: #2e2e2e;
     font-size: 20px;
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
-
 .moon-sun:hover :is(#moon, #sun) {
     color: #ffffff;
 }
-
 #moon {
     opacity: 1;
     transform: scale(1);
     
 }
-
 #sun {
     opacity: 0;
     transform: scale(0.5);
@@ -341,33 +334,512 @@ body.dark .project-box {
 .icon:hover{
     color: var(--first-color);
 }
-
-/* -- Feature image -- */
-.featured-image{
+.nav-menu-btn {
+    display: none;
+}
+.nav-menu-btn i {
+    font-size: 28px;
+    cursor: pointer;
+}
+.active-link {
+    position: relative;
+    color: var(--first-color);
+    transition: 0.3s;
+}
+.mode {
     display: flex;
-    justify-content: right;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.moon-sun {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    background: #e7e7e7;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
+}
+.moon-sun:hover{
+    background: var(--first-color);
+}
+.moon-sun :is(#moon, #sun) {
+    position: absolute;
+    color: #2e2e2e;
+    font-size: 20px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.moon-sun:hover :is(#moon, #sun) {
+    color: #ffffff;
+}
+#moon {
+    opacity: 1;
+    transform: scale(1);
+    
+}
+#sun {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+body.dark #moon {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+body.dark #sun {
+    opacity: 1;
+    transform: scale(1);
+}
+
+body.dark {
+    background-color: #1a1919;
+    color: #ffffff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark .featured-text-info {
+    font-size: 15px;
+    margin-bottom: 30px;
+    color: rgb(255, 255, 255);
+}
+
+body.dark .featured-name {
+    font-size: 50px;
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    margin-block: 20px;
+}
+
+body.dark .top-header {
+    text-align: center;
+    margin-bottom: 5em;
+}
+
+body.dark .top-header h1 {
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    margin-bottom: 10px;
+}
+
+body.dark h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    margin-bottom: 15px;
+}
+
+body.dark .about-info {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+body.dark .about-info p {
+    color: #ffffff;
+}
+
+body.dark .project-box {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+
+/* -- Wrapper design -- */
+.wrapper{
+    padding-inline: 10vw;
+}
+
+/* -- Feature box -- */
+.featured-box{
+    position: relative;
+    display: flex;
+    height: 100vh;
+    min-height: 700px;
+}
+
+/* -- Featured tex -- */
+.featured-text{
+    position: relative;
+    display: flex;
+    justify-content: center;
     align-content: center;
     min-height: 80vh;
+    flex-direction: column;
     width: 50%;
+    padding-left: 20px;
 }
-.image{
-    margin: auto 0;
-    width: 380px;
-    height: 380px;
-    border-radius: 55% 45% 55% 45%;
-    overflow: hidden;
-    animation: imgFloat 7s ease-in-out infinite;
+.featured-text-card span{
+    background: var(--first-color);
+    color: rgb(255, 255, 255);
+    padding: 3px 8px;
+    font-size: 12px;
+    border-radius: 5px;
 }
-.image img{
-    width: 380px;
-    height: 380px;
-    object-fit: cover;
+.featured-name{
+    font-size: 50px;
+    font-weight: 600;
+    color: rgb(68, 68, 68);
+    margin-block: 20px;
 }
-@keyframes imgFloat {
-    50%{
-        transform: translateY(10px);
-        border-radius: 45% 55% 45% 55%;
-    }
+.typedText{
+    text-transform: capitalize;
+    color: var(--first-color);
+}
+.featured-text-info{
+    font-size: 15px;
+    margin-bottom: 30px;
+    color: rgb(68, 68, 68);
+}
+.featured-text-btn{
+    display: flex;
+    gap: 20px;
+}
+.featured-text-btn>.blue-btn{
+    background: var(--first-color);
+    color: #f1f1f1;
+}
+.featured-text-btn>.blue-btn:hover{
+    background: var(--first-color);
+}
+.social_icons{
+    display: flex;
+    margin-top: 5em;
+    gap: 30px;
+}
+.icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
+.icon:hover{
+    color: var(--first-color);
+}
+.icon:hover{
+    color: var(--first-color);
+}
+.nav-menu-btn {
+    display: none;
+}
+.nav-menu-btn i {
+    font-size: 28px;
+    cursor: pointer;
+}
+.active-link {
+    position: relative;
+    color: var(--first-color);
+    transition: 0.3s;
+}
+.mode {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.moon-sun {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    background: #e7e7e7;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
+}
+.moon-sun:hover{
+    background: var(--first-color);
+}
+.moon-sun :is(#moon, #sun) {
+    position: absolute;
+    color: #2e2e2e;
+    font-size: 20px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.moon-sun:hover :is(#moon, #sun) {
+    color: #ffffff;
+}
+#moon {
+    opacity: 1;
+    transform: scale(1);
+    
+}
+#sun {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+body.dark #moon {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+body.dark #sun {
+    opacity: 1;
+    transform: scale(1);
+}
+
+body.dark {
+    background-color: #1a1919;
+    color: #ffffff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark .featured-text-info {
+    font-size: 15px;
+    margin-bottom: 30px;
+    color: rgb(255, 255, 255);
+}
+
+body.dark .featured-name {
+    font-size: 50px;
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    margin-block: 20px;
+}
+
+body.dark .top-header {
+    text-align: center;
+    margin-bottom: 5em;
+}
+
+body.dark .top-header h1 {
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    margin-bottom: 10px;
+}
+
+body.dark h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    margin-bottom: 15px;
+}
+
+body.dark .about-info {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+body.dark .about-info p {
+    color: #ffffff;
+}
+
+body.dark .project-box {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+
+/* -- Wrapper design -- */
+.wrapper{
+    padding-inline: 10vw;
+}
+
+/* -- Feature box -- */
+.featured-box{
+    position: relative;
+    display: flex;
+    height: 100vh;
+    min-height: 700px;
+}
+
+/* -- Featured tex -- */
+.featured-text{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    min-height: 80vh;
+    flex-direction: column;
+    width: 50%;
+    padding-left: 20px;
+}
+.featured-text-card span{
+    background: var(--first-color);
+    color: rgb(255, 255, 255);
+    padding: 3px 8px;
+    font-size: 12px;
+    border-radius: 5px;
+}
+.featured-name{
+    font-size: 50px;
+    font-weight: 600;
+    color: rgb(68, 68, 68);
+    margin-block: 20px;
+}
+.typedText{
+    text-transform: capitalize;
+    color: var(--first-color);
+}
+.featured-text-info{
+    font-size: 15px;
+    margin-bottom: 30px;
+    color: rgb(68, 68, 68);
+}
+.featured-text-btn{
+    display: flex;
+    gap: 20px;
+}
+.featured-text-btn>.blue-btn{
+    background: var(--first-color);
+    color: #f1f1f1;
+}
+.featured-text-btn>.blue-btn:hover{
+    background: var(--first-color);
+}
+.social_icons{
+    display: flex;
+    margin-top: 5em;
+    gap: 30px;
+}
+.icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
+.icon:hover{
+    color: var(--first-color);
+}
+.icon:hover{
+    color: var(--first-color);
+}
+.nav-menu-btn {
+    display: none;
+}
+.nav-menu-btn i {
+    font-size: 28px;
+    cursor: pointer;
+}
+.active-link {
+    position: relative;
+    color: var(--first-color);
+    transition: 0.3s;
+}
+.mode {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.moon-sun {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    background: #e7e7e7;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
+}
+.moon-sun:hover{
+    background: var(--first-color);
+}
+.moon-sun :is(#moon, #sun) {
+    position: absolute;
+    color: #2e2e2e;
+    font-size: 20px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.moon-sun:hover :is(#moon, #sun) {
+    color: #ffffff;
+}
+#moon {
+    opacity: 1;
+    transform: scale(1);
+    
+}
+#sun {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+body.dark #moon {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+body.dark #sun {
+    opacity: 1;
+    transform: scale(1);
+}
+
+body.dark {
+    background-color: #1a1919;
+    color: #ffffff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark .featured-text-info {
+    font-size: 15px;
+    margin-bottom: 30px;
+    color: rgb(255, 255, 255);
+}
+
+body.dark .featured-name {
+    font-size: 50px;
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    margin-block: 20px;
+}
+
+body.dark .top-header {
+    text-align: center;
+    margin-bottom: 5em;
+}
+
+body.dark .top-header h1 {
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    margin-bottom: 10px;
+}
+
+body.dark h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    margin-bottom: 15px;
+}
+
+body.dark .about-info {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+body.dark .about-info p {
+    color: #ffffff;
+}
+
+body.dark .project-box {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+
+/* -- Wrapper design -- */
+.wrapper{
+    padding-inline: 10vw;
+}
+
+/* -- Feature box -- */
+.featured-box{
+    position: relative;
+    display: flex;
+    height: 100vh;
+    min-height: 700px;
 }
 .scroll-btn{
    position: absolute;
@@ -389,8 +861,6 @@ body.dark .project-box {
 .scroll-btn i{
     font-size: 20px;
 }
-
-/* -- Main section -- */
 .section{
     padding-block: 5em;
 }
@@ -404,8 +874,6 @@ body.dark .project-box {
     display: flex;
     width: 50%;
 }
-
-/* -- Resuseable styles -- */
 .top-header{
     text-align: center;
     margin-bottom: 5em;
@@ -424,8 +892,6 @@ h3{
     color: rgb(68, 68, 68);
     margin-bottom: 15px;
 }
-
-/* -- About info -- */
 .about-info{
     position: relative;
     display: flex;
@@ -443,7 +909,6 @@ h3{
     font-size: 15px;
     color: #777;
 }
-
 .about-btn button{
     position: absolute;
     right: 20px;
@@ -455,8 +920,6 @@ h3{
 .about-btn button:hover{
     background: var(--first-color);
 }
-
-/* -- About / Skill box -- */
 .skills-box{
     margin: 10px;
 }
@@ -475,8 +938,6 @@ h3{
     padding: 2px 10px;
     border-radius: 5px;
 }
-
-/* -- Project box -- */
 .project-container{
     display: flex;
     width: 100%;
@@ -526,8 +987,6 @@ h3{
     color: rgb(255, 255, 255);
     z-index: 2;
 }
-
-/* -- Contct box -- */
 .contact-info{
     position: relative;
     display: flex;
@@ -568,14 +1027,11 @@ body.dark .contact-info::after {
     color: #777;
     z-index: 2;
 }
-
 body.dark .contact-info:hover.contact-info h2,
 body.dark .contact-info:hover.contact-info p,
 body.dark .contact-info:hover.contact-info i {
     color: #ffffff;
 }
-
-/* -- Contact form -- */
 .form-control{
     display: flex;
     flex-direction: column;
@@ -620,8 +1076,6 @@ textarea{
     font-size: 18px;
     rotate: -45deg;
 }
-
-/* -- Footer Section -- */
 footer {
     display: flex;
     justify-content: center;
@@ -631,56 +1085,45 @@ footer {
     background: #F8F8F8; /* Default background */
     padding-block: 40px 60px;
 }
-
 body.dark footer {
     background: #1a1919; /* Dark background for dark mode */
     color: #ffffff; /* Light text color for better contrast */
 }
-
 .top-footer p {
     font-size: 25px;
     font-weight: 600;
     color: rgb(68, 68, 68); /* Default text color */
 }
-
 body.dark .top-footer p {
     color: #ffffff; /* Adjust text color for dark mode */
 }
-
 .middle-footer .footer-menu {
     display: flex;
 }
-
 .footer_menu_list {
     list-style: none;
 }
-
 .footer_menu_list a {
     text-decoration: none;
     color: rgb(68, 68, 68); /* Default link color */
     font-weight: 500;
     margin-inline: 20px;
 }
-
 body.dark .footer_menu_list a {
     color: #cccccc; /* Adjust link color for dark mode */
 }
-
 .footer-social-icons {
     display: flex;
     gap: 30px;
 }
-
 .bottom-footer {
     font-size: 14px;
     margin-top: 10px;
     color: rgb(68, 68, 68); /* Default text color */
 }
-
 body.dark .bottom-footer {
     color: #bbbbbb; /* Adjust text color for dark mode */
 }
-
 /* -- 1024px - Responsive settings -- */
 @media only screen and (max-width: 1024px){
     .featured-text{
@@ -691,7 +1134,6 @@ body.dark .bottom-footer {
         height: 320px;
     }
 }
-
 /* -- 720px - Responsive settings -- */
 @media only screen and (max-width: 720px) {
     .nav-button{
@@ -775,7 +1217,6 @@ body.dark .bottom-footer {
         gap: 4px;
      }
 }
-
 /* -- 480px - Responsive settings -- */
 @media only screen and (max-width: 480px){
     .featured-name{

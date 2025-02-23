@@ -1,10 +1,33 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-  const toggleSwitch = document.getElementById('toggle-switch');
-  const body = document.body;
-  toggleSwitch.addEventListener('click', () => {
-      body.classList.toggle('dark');
-  });
+    const toggleSwitch = document.getElementById('toggle-switch');
+    const body = document.body;
+
+    // 检查系统主题偏好
+    function checkSystemTheme() {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            body.classList.add('dark');
+        } else {
+            body.classList.remove('dark');
+        }
+    }
+
+    // 初始检查系统主题
+    checkSystemTheme();
+
+    // 监听系统主题变化
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (e.matches) {
+            body.classList.add('dark');
+        } else {
+            body.classList.remove('dark');
+        }
+    });
+
+    // 保留手动切换功能
+    toggleSwitch.addEventListener('click', () => {
+        body.classList.toggle('dark');
+    });
 });
 
 /* -- Navigation Function -- */
