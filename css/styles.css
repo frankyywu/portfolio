@@ -100,6 +100,14 @@ body {
     top: var(--spacing-unit);
     left: var(--spacing-unit);
     z-index: 100;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--spacing-unit) * 2); /* 减去上下间距 */
+}
+
+.nav-spacer {
+    flex: 1;
+    min-height: 20px; /* 确保在内容很少时也有最小间距 */
 }
 
 .dc__nav button {
@@ -118,7 +126,7 @@ body {
     opacity: 0;
     transform: translateX(-10px);
     animation: slideRight 0.4s var(--ease-out-expo) forwards;
-    animation-delay: calc(var(--index, 0) * 0.1s);
+    animation-delay: calc(var(--index, 0) * 0.1s + 0.2s);
 }
 
 /* 加号/减号图标 */

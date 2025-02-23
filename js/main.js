@@ -33,10 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCursorState(e) {
             const target = document.elementFromPoint(e.clientX, e.clientY);
             
-            // 在可交互元素上显示系统光标并隐藏自定义光标
-            if (target.matches('button, [data-button], a, [role="button"]')) {
+            // 在可交互元素或其子元素上显示系统光标并隐藏自定义光标
+            if (target.matches('button, [data-button], a, [role="button"], .dc__nav button span')) {
                 this.cursor.classList.add('hide');
-                target.style.cursor = 'pointer';
+                // 找到最近的可交互元素
+                const interactiveElement = target.closest('button, [data-button], a, [role="button"]');
+                if (interactiveElement) {
+                    interactiveElement.style.cursor = 'pointer';
+                }
                 return;
             }
             
@@ -196,18 +200,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const scroller = {
         init() {
             this.scrollers = document.querySelectorAll('.home-scroller__line');
-            this.baseSpeed = 1;
-            this.maxSpeed = 8;
-            this.acceleration = 0.4;
-            this.deceleration = 0.92;
+            this.baseSpeed = 0.2;    // 稍微降低基础速度
+            this.maxSpeed = 0.5;     // 降低最大速度
+            this.acceleration = 0.2;  // 相应调整加速度
             this.direction = -1;
             this.isScrolling = true;
             this.velocity = this.baseSpeed * this.direction;
             this.lastWheelTime = 0;
             
-            // 首先阻止页面滚动
+            // 阻止页面滚动
             document.body.style.overflow = 'hidden';
-            document.addEventListener('wheel', (e) => e.preventDefault(), { passive: false });
+            document.addEventListener('wheel', (e) => {
+                // 只在没有展开内容时阻止滚动
+                if (!document.querySelector('.dc__main__container[aria-expanded="true"]')) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
             
             if (this.scrollers.length) {
                 this.setupScroll();
@@ -229,18 +237,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
 
-                let currentScroll = -itemHeight * items.length; // 从中间开始
-                const totalHeight = content.scrollHeight / 5; // 一份内容的高度
+                let currentScroll = -itemHeight * items.length;
+                const totalHeight = content.scrollHeight / 5;
 
                 const animate = () => {
                     if (!this.isScrolling) {
                         requestAnimationFrame(animate);
                         return;
-                    }
-
-                    this.velocity *= this.deceleration;
-                    if (Math.abs(this.velocity) < 0.1) {
-                        this.velocity = this.baseSpeed * this.direction;
                     }
 
                     currentScroll += this.velocity;
@@ -260,20 +263,25 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         },
 
-        preventPageScroll() {
-            // 阻止页面默认滚动行为
+        handleWheelDirection() {
             document.addEventListener('wheel', (e) => {
-                if (e.target.closest('.home-scroller')) {
-                    e.preventDefault();
+                if (document.querySelector('.dc__main__container[aria-expanded="true"]')) {
+                    return; // 如果有展开内容，不处理滚动
                 }
-            }, { passive: false });
-            
-            // 阻止触摸滚动
-            document.addEventListener('touchmove', (e) => {
-                if (e.target.closest('.home-scroller')) {
-                    e.preventDefault();
+
+                // 反转滚动方向（自然滚动）
+                const newDirection = e.deltaY > 0 ? -1 : 1;
+                
+                // 如果方向改变，重置速度
+                if (newDirection !== this.direction) {
+                    this.velocity = this.baseSpeed * newDirection;
                 }
-            }, { passive: false });
+                
+                this.direction = newDirection;
+                
+                // 增加速度，但不超过最大值
+                this.velocity = Math.min(Math.max(Math.abs(this.velocity) + this.acceleration, this.baseSpeed), this.maxSpeed) * this.direction;
+            });
         },
 
         handleContentState() {
@@ -288,11 +296,15 @@ document.addEventListener('DOMContentLoaded', () => {
                             this.savedVelocity = this.velocity;
                             this.savedDirection = this.direction;
                             this.isScrolling = false;
+                            // 允许页面滚动
+                            document.body.style.overflow = 'auto';
                         } else {
                             // 恢复之前的状态
                             this.velocity = this.savedVelocity || this.baseSpeed;
                             this.direction = this.savedDirection || -1;
                             this.isScrolling = true;
+                            // 重新禁用页面滚动
+                            document.body.style.overflow = 'hidden';
                         }
                     }
                 });
@@ -302,34 +314,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 attributes: true,
                 subtree: true,
                 attributeFilter: ['aria-expanded']
-            });
-        },
-
-        handleWheelDirection() {
-            let wheelTimeout;
-            document.addEventListener('wheel', (e) => {
-                const now = performance.now();
-                clearTimeout(wheelTimeout);
-                
-                // 反转滚动方向（自然滚动）
-                this.direction = e.deltaY > 0 ? -1 : 1;
-                
-                // 计算滚动加速度
-                const timeDelta = now - this.lastWheelTime;
-                if (timeDelta < 200) { // 快速滚动
-                    this.velocity = (this.velocity + this.acceleration) * this.direction;
-                    // 限制最大速度
-                    this.velocity = Math.min(Math.max(Math.abs(this.velocity), this.baseSpeed), this.maxSpeed) * this.direction;
-                } else {
-                    this.velocity = this.baseSpeed * this.direction;
-                }
-                
-                this.lastWheelTime = now;
-                
-                // 延迟恢复到基础速度
-                wheelTimeout = setTimeout(() => {
-                    this.velocity = this.baseSpeed * this.direction;
-                }, 300);
             });
         }
     };
