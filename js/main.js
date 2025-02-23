@@ -299,14 +299,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (hasExpandedContent) {
                             // 保存当前状态
                             this.savedVelocity = this.velocity;
-                            this.savedDirection = this.direction;
                             this.isScrolling = false;
                             // 允许页面滚动
                             document.body.style.overflow = 'auto';
                         } else {
-                            // 恢复之前的状态
-                            this.velocity = this.savedVelocity || this.baseSpeed;
-                            this.direction = this.savedDirection || -1;
+                            // 恢复速度但保持当前方向
+                            this.velocity = Math.abs(this.savedVelocity || this.baseSpeed) * this.direction;
                             this.isScrolling = true;
                             // 重新禁用页面滚动
                             document.body.style.overflow = 'hidden';
