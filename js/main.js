@@ -304,8 +304,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             // 允许页面滚动
                             document.body.style.overflow = 'auto';
                         } else {
-                            // 恢复之前的状态，但保持当前方向
-                            this.velocity = Math.abs(this.savedVelocity || this.baseSpeed) * this.direction;
+                            // 恢复之前的状态
+                            this.velocity = this.savedVelocity || this.baseSpeed;
+                            this.direction = this.savedDirection || -1;
                             this.isScrolling = true;
                             // 重新禁用页面滚动
                             document.body.style.overflow = 'hidden';
