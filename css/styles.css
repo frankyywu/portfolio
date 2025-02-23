@@ -1,0 +1,656 @@
+:root {
+    --color-background: #ffffff;
+    --color-text: #000000;
+    --spacing-unit: 20px;
+    --transition-speed: 0.3s;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --content-width: 680px; /* 更窄的内容区域 */
+}
+
+/* 重置样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+/* 自定义光标 */
+.dc-cursor {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    width: 20px;
+    height: 20px;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference;
+    opacity: 1; /* 默认显示 */
+}
+
+/* 在可交互元素上隐藏自定义光标 */
+.dc-cursor.hide {
+    opacity: 0;
+}
+
+.dc-cursor::before,
+.dc-cursor::after {
+    content: '';
+    position: absolute;
+    background: #fff;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dc-cursor::before {
+    width: 1px;
+    height: 100%;
+    left: 50%;
+    top: 0;
+    transform-origin: center center;
+}
+
+.dc-cursor::after {
+    width: 100%;
+    height: 1px;
+    top: 50%;
+    left: 0;
+    transform-origin: center center;
+}
+
+/* 悬浮状态 */
+.dc-cursor.button-hover::before {
+    transform: rotate(45deg);
+}
+
+.dc-cursor.button-hover::after {
+    transform: rotate(45deg);
+}
+
+/* 关闭提示文字 */
+.dc-cursor__close {
+    position: absolute;
+    left: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #fff;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.dc-cursor.button-hover .dc-cursor__close {
+    opacity: 1;
+}
+
+/* 移除不需要的光标元素 */
+.dc-cursor__next,
+.dc-cursor__previous {
+    display: none;
+}
+
+/* 导航样式 */
+.dc__nav {
+    position: fixed;
+    top: var(--spacing-unit);
+    left: var(--spacing-unit);
+    z-index: 100;
+}
+
+.dc__nav button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 140px; /* 固定宽度使布局更整齐 */
+    background: none;
+    border: none;
+    padding: 10px;
+    margin: 5px 0;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--color-text);
+    transition: all var(--transition-speed) var(--ease-out-expo);
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: slideRight 0.4s var(--ease-out-expo) forwards;
+    animation-delay: calc(var(--index, 0) * 0.1s);
+}
+
+/* 加号/减号图标 */
+.dc__nav button span {
+    position: relative;
+    width: 12px;
+    height: 12px;
+}
+
+.dc__nav button span::before,
+.dc__nav button span::after {
+    content: '';
+    position: absolute;
+    background: currentColor;
+    transition: all var(--transition-speed) var(--ease-out-expo);
+}
+
+/* 横线 */
+.dc__nav button span::before {
+    width: 100%;
+    height: 1px;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+/* 竖线 */
+.dc__nav button span::after {
+    width: 1px;
+    height: 100%;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+}
+
+/* 展开状态 */
+.dc__nav button[aria-expanded="true"] {
+    color: var(--color-text);
+}
+
+/* 展开时竖线消失形成减号 */
+.dc__nav button[aria-expanded="true"] span::after {
+    transform: translateX(-50%) scaleY(0);
+}
+
+/* 其他按钮弱化 */
+.dc__nav button[aria-expanded="false"].sibling-expanded {
+    opacity: 0.4;
+}
+
+/* hover时恢复完整显示 */
+.dc__nav button[aria-expanded="false"].sibling-expanded:hover {
+    opacity: 1;
+}
+
+/* 页面布局 */
+.page-inner {
+    min-height: 100vh;
+    padding: var(--spacing-unit);
+    opacity: 0;
+    animation: fadeIn 0.6s var(--ease-out-expo) forwards;
+}
+
+/* Studio 部分样式 */
+.dc__main {
+    position: relative;
+    margin-left: 240px; /* 增加左侧间距 */
+    padding: 40px;
+    max-width: var(--content-width);
+}
+
+.dc__main__container {
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s var(--ease-out-expo),
+                transform 0.6s var(--ease-out-expo);
+}
+
+.dc__main__container[aria-expanded="true"] {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.studio-content {
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.6s var(--ease-out-expo) forwards;
+    animation-delay: calc(var(--index, 0) * 0.1s);
+}
+
+.studio-content__title {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.studio-content__content {
+    font-size: 18px;
+    line-height: 1.8;
+    max-width: 100%;
+}
+
+.studio-list {
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.6s var(--ease-out-expo) forwards;
+    animation-delay: calc(var(--index, 0) * 0.1s);
+}
+
+.studio-list__title {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 15px;
+}
+
+.studio-list__content ul {
+    list-style: none;
+}
+
+.studio-list__content li {
+    margin-bottom: 8px;
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: slideRight 0.4s var(--ease-out-expo) forwards;
+    animation-delay: calc(var(--index, 0) * 0.05s + 0.2s);
+}
+
+.studio-list__content li.indent {
+    padding-left: 20px;
+}
+
+.studio-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    margin-top: 60px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.6s var(--ease-out-expo) forwards;
+    animation-delay: 0.4s;
+}
+
+.studio-gallery img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(0.95);
+    animation: zoomIn 0.6s var(--ease-out-expo) forwards;
+    animation-delay: calc(var(--index, 0) * 0.1s + 0.6s);
+}
+
+/* 动画关键帧 */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 响应式调整 */
+@media (max-width: 1200px) {
+    .dc__main {
+        margin-left: 200px;
+        padding: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .dc__main {
+        margin-left: 0;
+        padding: 20px;
+        max-width: 100%;
+    }
+}
+
+/* 内容区域的链接和按钮使用系统光标 */
+.dc__main a,
+.dc__nav button,
+[data-button] {
+    cursor: pointer; /* 使用系统默认指针 */
+}
+
+/* 作品集样式 */
+.work-intro {
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.6s var(--ease-out-expo) forwards;
+}
+
+.work-intro__content {
+    font-size: 18px;
+    line-height: 1.8;
+    max-width: 100%;
+}
+
+.work-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 80px;
+    margin-top: 40px;
+}
+
+.work-item {
+    opacity: 0;
+    transform: translateY(40px);
+    animation: slideUp 0.8s var(--ease-out-expo) forwards;
+    animation-delay: calc(var(--index, 0) * 0.1s + 0.2s);
+}
+
+.work-item__image {
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.work-item__image img {
+    width: 100%;
+    height: auto;
+    transform: scale(1.1);
+    transition: transform 1.2s var(--ease-out-expo);
+}
+
+.work-item:hover .work-item__image img {
+    transform: scale(1);
+}
+
+.work-item__content {
+    padding: 20px 0;
+}
+
+.work-item__title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-weight: normal;
+}
+
+.work-item__description {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.work-item__meta {
+    font-size: 14px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* 响应式调整 */
+@media (min-width: 1200px) {
+    .work-grid {
+        gap: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    .work-grid {
+        gap: 60px;
+    }
+}
+
+/* 联系方式样式 */
+.contact-intro {
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.6s var(--ease-out-expo) forwards;
+}
+
+.contact-intro__content {
+    font-size: 18px;
+    line-height: 1.8;
+    max-width: 100%;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-top: 40px;
+}
+
+/* 联系信息部分 */
+.contact-info {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.6s var(--ease-out-expo) forwards;
+    animation-delay: 0.2s;
+}
+
+.contact-info__group {
+    margin-bottom: 40px;
+}
+
+.contact-info__title {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 15px;
+    color: #666;
+}
+
+.contact-info__link {
+    display: block;
+    font-size: 18px;
+    color: var(--color-text);
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: opacity var(--transition-speed) ease;
+}
+
+.contact-info__link:hover {
+    opacity: 0.6;
+}
+
+.contact-info__text {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* 表单样式 */
+.contact-form {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.6s var(--ease-out-expo) forwards;
+    animation-delay: 0.3s;
+}
+
+.form-group {
+    margin-bottom: 30px;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 16px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    color: var(--color-text);
+    transition: border-color var(--transition-speed) ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-text);
+}
+
+textarea.form-input {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-submit {
+    padding: 12px 30px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: var(--color-text);
+    color: var(--color-background);
+    border: none;
+    cursor: pointer;
+    transition: opacity var(--transition-speed) ease;
+}
+
+.form-submit:hover {
+    opacity: 0.8;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+/* 主标题样式 */
+.home-title {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    width: 50%; /* 占据左半部分 */
+    padding-right: var(--spacing-unit);
+    text-align: right; /* 右对齐 */
+}
+
+.home-title h1 {
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+/* 滚动文字样式 */
+.home-scroller {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 50%;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.home-scroller__inner {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 100vh;
+}
+
+.home-scroller__line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    will-change: transform;
+}
+
+.home-scroller__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: var(--spacing-unit);
+}
+
+.home-scroller__content span {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-text);
+    display: block;
+    white-space: nowrap;
+    padding: 0.2em 0;
+}
+
+/* 上下遮罩 */
+.home-scroller::before,
+.home-scroller::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.home-scroller::before {
+    top: 0;
+    height: calc(50% - 16px);
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.home-scroller::after {
+    bottom: 0;
+    height: calc(50% - 16px);
+    background: rgba(255, 255, 255, 0.85);
+}
+
+/* 展开内容时的毛玻璃效果 */
+.has-expanded-content .dc__main::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 1;
+}
+
+/* 确保展开内容在毛玻璃上层 */
+.dc__main__container {
+    position: relative;
+    z-index: 2;
+}
+
+.scroller-viewport {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
