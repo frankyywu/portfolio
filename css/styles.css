@@ -28,7 +28,7 @@ body {
 .dc-cursor {
     position: fixed;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 9999;  /* 保持在最顶层 */
     width: 20px;
     height: 20px;
     transform: translate(-50%, -50%);
@@ -121,6 +121,7 @@ body {
         background: var(--color-background);
         padding: 10px var(--spacing-unit);
         border-top: 1px solid rgba(0, 0, 0, 0.1);
+        z-index: 91;  /* 确保导航栏在遮罩层上方 */
     }
 
     .dc__nav button {
@@ -385,7 +386,7 @@ body {
         background: var(--color-background);
         transform: translateY(100%);
         transition: transform 0.3s var(--ease-out-expo);
-        z-index: 100;  /* 确保在遮罩层上方 */
+        z-index: 90;  /* 确保内容在遮罩层上方但在导航栏下方 */
     }
 
     .dc__main__container[aria-expanded="true"] {
@@ -772,8 +773,8 @@ textarea.form-input {
     background: rgba(0, 0, 0, 0.3);
     opacity: 0;
     transition: opacity 0.3s ease;
-    z-index: 95;  /* 在主内容之上，在卡片之下 */
-    cursor: pointer !important;  /* 强制使用指针样式 */
+    z-index: 89;  /* 降低遮罩层的层级 */
+    cursor: pointer !important;
 }
 
 @media (max-width: 768px) {
@@ -783,6 +784,6 @@ textarea.form-input {
     }
 
     .dc__main__container {
-        z-index: 96;  /* 确保在遮罩层之上 */
+        z-index: 90;  /* 确保内容在遮罩层上方但在导航栏下方 */
     }
 }
