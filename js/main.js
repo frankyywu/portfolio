@@ -88,12 +88,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const accordion = {
         init() {
             this.buttons = document.querySelectorAll('[data-button]');
+            this.overlay = document.querySelector('.modal-overlay');
             this.addEventListeners();
             
             // 设置按钮动画延迟
             this.buttons.forEach((button, index) => {
                 button.style.setProperty('--index', index);
             });
+
+            // 添加遮罩层点击事件
+            if (this.overlay) {
+                this.overlay.addEventListener('click', () => {
+                    const expandedButton = document.querySelector('[data-button][aria-expanded="true"]');
+                    if (expandedButton) {
+                        this.closePanel(expandedButton);
+                        // 移除所有按钮的弱化效果
+                        this.buttons.forEach(btn => btn.classList.remove('sibling-expanded'));
+                    }
+                });
+            }
         },
 
         addEventListeners() {

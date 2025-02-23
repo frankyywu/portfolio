@@ -105,7 +105,37 @@ body {
     z-index: 100;
     display: flex;
     flex-direction: column;
-    height: calc(100vh - var(--spacing-unit) * 2); /* 减去上下间距 */
+    height: calc(100vh - var(--spacing-unit) * 2);
+}
+
+/* 移动端导航样式 */
+@media (max-width: 768px) {
+    .dc__nav {
+        flex-direction: row;
+        justify-content: space-around;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        background: var(--color-background);
+        padding: 10px var(--spacing-unit);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .dc__nav button {
+        width: auto;
+        margin: 0;
+        padding: 8px 12px;
+        font-size: 14px;
+        transform: none;
+        opacity: 1;
+        animation: none;
+    }
+
+    .nav-spacer {
+        display: none;
+    }
 }
 
 .nav-spacer {
@@ -197,7 +227,7 @@ body {
 /* Studio 部分样式 */
 .dc__main {
     position: relative;
-    margin-left: 240px; /* 增加左侧间距 */
+    margin-left: 240px;
     padding: 40px;
     max-width: var(--content-width);
 }
@@ -343,7 +373,36 @@ body {
     .dc__main {
         margin-left: 0;
         padding: 20px;
-        max-width: 100%;
+        margin-bottom: 60px;
+    }
+
+    .dc__main__container {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 80vh;  /* 固定高度为屏幕的80% */
+        background: var(--color-background);
+        transform: translateY(100%);
+        transition: transform 0.3s var(--ease-out-expo);
+        z-index: 100;  /* 确保在遮罩层上方 */
+    }
+
+    .dc__main__container[aria-expanded="true"] {
+        transform: translateY(0);
+    }
+
+    .expander__content {
+        height: 100%;  /* 填满容器 */
+        overflow-y: auto;
+        padding: 20px 20px 80px 20px;  /* 底部留出导航栏的空间 */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* 移除圆角和阴影 */
+    .dc__main__container {
+        border-radius: 0;
+        box-shadow: none;
     }
 }
 
@@ -682,4 +741,48 @@ textarea.form-input {
     overflow: hidden;
     padding: 0 20px;
     transition: all 0.3s ease-in-out;
+}
+
+/* 主标题样式 */
+@media (max-width: 768px) {
+    .home-title {
+        width: 50%;  /* 改回50% */
+        padding-right: 4px;
+        text-align: right;  /* 保持右对齐 */
+        top: 50%;  /* 恢复原来的位置 */
+    }
+
+    .home-scroller {
+        width: 50%;  /* 改回50% */
+        top: 0;  /* 恢复原来的位置 */
+        right: 0;
+    }
+
+    .home-scroller__content {
+        padding-left: 4px;
+        align-items: flex-start;  /* 恢复左对齐 */
+    }
+}
+
+/* 遮罩层样式 */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 95;  /* 在主内容之上，在卡片之下 */
+    cursor: pointer !important;  /* 强制使用指针样式 */
+}
+
+@media (max-width: 768px) {
+    .has-expanded-content .modal-overlay {
+        display: block;
+        opacity: 1;
+    }
+
+    .dc__main__container {
+        z-index: 96;  /* 确保在遮罩层之上 */
+    }
 }
