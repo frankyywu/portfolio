@@ -124,6 +124,7 @@ body {
     margin: 5px 0;
     cursor: pointer;
     font-size: 16px;
+    font-family: var(--font-family);  /* 添加字体 */
     color: var(--color-text);
     transition: all var(--transition-speed) var(--ease-out-expo);
     opacity: 0;
@@ -565,9 +566,9 @@ textarea.form-input {
     top: 50%;
     transform: translateY(-50%);
     z-index: 1;
-    width: 50%; /* 占据左半部分 */
-    padding-right: var(--spacing-unit);
-    text-align: right; /* 右对齐 */
+    width: 50%;
+    padding-right: 4px;  /* 减小右侧padding */
+    text-align: right;
 }
 
 .home-title h1 {
@@ -610,7 +611,7 @@ textarea.form-input {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding-left: var(--spacing-unit);
+    padding-left: 4px;  /* 减小左侧padding */
 }
 
 .home-scroller__content span {
