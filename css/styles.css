@@ -24,77 +24,106 @@ body {
     font-style: normal;
 }
 
-/* 自定义光标 */
-.dc-cursor {
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;  /* 保持在最顶层 */
-    width: 20px;
-    height: 20px;
-    transform: translate(-50%, -50%);
-    mix-blend-mode: difference;
-    opacity: 1; /* 默认显示 */
+/* 自定义光标 - 只在宽屏显示 */
+@media (min-width: 769px) {
+    .dc-cursor {
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        width: 20px;
+        height: 20px;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: difference;
+        opacity: 1;
+    }
+
+    /* 在可交互元素上隐藏自定义光标 */
+    .dc-cursor.hide {
+        opacity: 0;
+    }
+
+    .dc-cursor::before,
+    .dc-cursor::after {
+        content: '';
+        position: absolute;
+        background: #fff;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .dc-cursor::before {
+        width: 1px;
+        height: 100%;
+        left: 50%;
+        top: 0;
+        transform-origin: center center;
+    }
+
+    .dc-cursor::after {
+        width: 100%;
+        height: 1px;
+        top: 50%;
+        left: 0;
+        transform-origin: center center;
+    }
+
+    /* 悬浮状态 */
+    .dc-cursor.button-hover::before {
+        transform: rotate(45deg);
+    }
+
+    .dc-cursor.button-hover::after {
+        transform: rotate(45deg);
+    }
+
+    /* 关闭提示文字 */
+    .dc-cursor__close {
+        position: absolute;
+        left: calc(100% + 8px);
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
+        color: #fff;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .dc-cursor.button-hover .dc-cursor__close {
+        opacity: 1;
+    }
+
+    /* 默认隐藏系统光标 */
+    body {
+        cursor: none;
+    }
 }
 
-/* 在可交互元素上隐藏自定义光标 */
-.dc-cursor.hide {
-    opacity: 0;
-}
+/* 窄屏使用系统默认光标 */
+@media (max-width: 768px) {
+    .dc-cursor {
+        display: none;
+    }
 
-.dc-cursor::before,
-.dc-cursor::after {
-    content: '';
-    position: absolute;
-    background: #fff;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
+    body {
+        cursor: auto;
+    }
 
-.dc-cursor::before {
-    width: 1px;
-    height: 100%;
-    left: 50%;
-    top: 0;
-    transform-origin: center center;
-}
+    /* 确保所有可交互元素显示正确的系统光标 */
+    a, 
+    button,
+    [data-button],
+    .dc__nav button,
+    .contact-info__link,
+    .form-submit {
+        cursor: pointer;
+    }
 
-.dc-cursor::after {
-    width: 100%;
-    height: 1px;
-    top: 50%;
-    left: 0;
-    transform-origin: center center;
-}
-
-/* 悬浮状态 */
-.dc-cursor.button-hover::before {
-    transform: rotate(45deg);
-}
-
-.dc-cursor.button-hover::after {
-    transform: rotate(45deg);
-}
-
-/* 关闭提示文字 */
-.dc-cursor__close {
-    position: absolute;
-    left: calc(100% + 8px);
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 12px;
-    color: #fff;
-    white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.dc-cursor.button-hover .dc-cursor__close {
-    opacity: 1;
-}
-
-/* 移除不需要的光标元素 */
-.dc-cursor__next,
-.dc-cursor__previous {
-    display: none;
+    /* 文本输入区域显示文本光标 */
+    input[type="text"],
+    input[type="email"],
+    textarea {
+        cursor: text;
+    }
 }
 
 /* 导航样式 */
@@ -136,6 +165,21 @@ body {
 
     .nav-spacer {
         display: none;
+    }
+
+    .dc-cursor {
+        display: none;  /* 在移动端隐藏自定义光标 */
+    }
+
+    /* 恢复默认光标样式 */
+    body {
+        cursor: auto;
+    }
+
+    .dc__nav button,
+    a,
+    [data-button] {
+        cursor: pointer;
     }
 }
 
@@ -233,13 +277,14 @@ body {
     max-width: var(--content-width);
 }
 
+/* 全局容器样式 */
 .dc__main__container {
     display: none;
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.6s var(--ease-out-expo),
                 transform 0.6s var(--ease-out-expo);
-    position: relative;
+    position: relative;  /* 改为relative */
     z-index: 2;
 }
 
@@ -370,40 +415,69 @@ body {
     }
 }
 
+/* 移动端样式 */
 @media (max-width: 768px) {
+    /* 基础布局调整 */
     .dc__main {
         margin-left: 0;
         padding: 20px;
-        margin-bottom: 60px;
     }
 
+    /* 抽屉容器 - 完全重写 */
     .dc__main__container {
-        position: fixed;
+        display: block !important;  /* 覆盖全局display */
+        opacity: 1 !important;      /* 覆盖全局opacity */
+        transform: none !important; /* 移除transform */
+        position: fixed !important; /* 改为fixed */
         left: 0;
-        bottom: 0;
+        right: 0;
+        bottom: -50vh;
         width: 100%;
-        height: 80vh;  /* 固定高度为屏幕的80% */
+        height: 50vh;
         background: var(--color-background);
-        transform: translateY(100%);
-        transition: transform 0.3s var(--ease-out-expo);
-        z-index: 90;  /* 确保内容在遮罩层上方但在导航栏下方 */
+        transition: bottom 0.3s var(--ease-out-expo);
+        z-index: 90;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
 
+    /* 抽屉展开状态 */
     .dc__main__container[aria-expanded="true"] {
-        transform: translateY(0);
+        bottom: 60px !important;
+        transform: none !important;
     }
 
+    /* 内容区域 */
     .expander__content {
-        height: 100%;  /* 填满容器 */
+        height: 100%;
         overflow-y: auto;
-        padding: 20px 20px 80px 20px;  /* 底部留出导航栏的空间 */
+        padding: 20px;
         -webkit-overflow-scrolling: touch;
     }
 
-    /* 移除圆角和阴影 */
-    .dc__main__container {
-        border-radius: 0;
-        box-shadow: none;
+    /* 导航栏 */
+    .dc__nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        z-index: 100;
+        background: var(--color-background);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    /* 移除所有遮罩效果 */
+    .modal-overlay,
+    .has-expanded-content .dc__main::before {
+        display: none !important;
+    }
+
+    /* 确保内容不会被导航栏遮挡 */
+    body {
+        padding-bottom: 60px;
     }
 }
 
