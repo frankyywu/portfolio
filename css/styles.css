@@ -751,12 +751,21 @@ textarea.form-input {
     }
 }
 
-/* 主标题全局样式（宽屏） */
+/* 主标题全局样式 */
 .home-title {
     position: fixed;
     top: 50%;
     transform: translateY(-50%);
     z-index: 1;
+}
+
+.home-title h1 {
+    font-size: 20px;          /* 与滚动列表相同 */
+    line-height: 1.6;         /* 与滚动列表相同 */
+    padding: 0.2em 0;         /* 与滚动列表相同 */
+    font-weight: normal;      /* 移除加粗 */
+    color: var(--color-text);
+    margin: 0;               /* 移除默认边距 */
 }
 
 /* 宽屏样式 */
@@ -766,14 +775,6 @@ textarea.form-input {
         width: 50%;
         padding-right: 4px;
         text-align: right;
-    }
-
-    .home-title h1 {
-        font-size: 20px;
-        line-height: 1.6;
-        padding: 0.2em 0;
-        font-weight: normal;
-        color: var(--color-text);
     }
 
     .home-scroller {
@@ -795,14 +796,6 @@ textarea.form-input {
         text-align: right;
     }
 
-    .home-title h1 {
-        font-size: 20px;          /* 改回20px，与宽屏一致 */
-        line-height: 1.6;
-        padding: 0.2em 0;
-        font-weight: normal;
-        color: var(--color-text);
-    }
-
     .home-scroller {
         position: fixed !important;
         left: 30% !important;
@@ -810,15 +803,9 @@ textarea.form-input {
         width: auto !important;
         padding-left: 4px;
     }
-
-    .home-scroller__content span {
-        font-size: 20px;          /* 改回20px，与宽屏一致 */
-        line-height: 1.6;
-        padding: 0.2em 0;
-    }
 }
 
-/* 滚动文字全局样式（宽屏） */
+/* 滚动文字全局样式 */
 .home-scroller {
     position: fixed;
     right: 0;
