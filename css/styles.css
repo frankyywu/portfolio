@@ -485,57 +485,43 @@ body {
         position: fixed;
         width: 30% !important;
         left: 0 !important;
-        top: 50vh !important;           /* 使用vh单位 */
-        transform: translateY(-50%) !important;  /* 确保垂直居中 */
+        top: 50% !important;
+        transform: translateY(-50%) !important;
         padding-right: 4px;
         text-align: right;
-        z-index: 1;
     }
 
-    .home-title h1 {
-        font-size: 18px;
-        white-space: nowrap;
-    }
-
-    /* 滚动文字位置调整 */
+    /* 滚动文字容器调整 */
     .home-scroller {
         position: fixed !important;
         left: 30% !important;
         right: 20px !important;
         width: auto !important;
-        height: 100vh !important;       /* 确保高度正确 */
-        padding-left: 4px;
+        height: 100% !important;
+    }
+
+    /* 滚动内容容器调整 */
+    .home-scroller__inner {
+        position: absolute !important;
+        left: 0 !important;
+        right: 0 !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        height: auto !important;  /* 让高度自适应内容 */
     }
 
     .home-scroller__content {
-        padding-left: 0;
+        padding-left: 4px;
         padding-right: 20px;
     }
 
+    /* 确保文字样式统一 */
+    .home-title h1,
     .home-scroller__content span {
-        font-size: 16px;
-    }
-
-    /* 确保遮罩效果在移动端正常工作 */
-    .home-scroller::before,
-    .home-scroller::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        right: 0;
-        height: calc(50% - 16px);
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    .home-scroller::before {
-        top: 0;
-        background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
-    }
-
-    .home-scroller::after {
-        bottom: 0;
-        background: linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+        font-size: 20px;
+        line-height: 1.6;
+        padding: 0.2em 0;
+        font-weight: normal;
     }
 
     /* 添加视口高度调整 */
