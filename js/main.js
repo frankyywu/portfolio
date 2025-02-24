@@ -218,28 +218,84 @@ document.addEventListener('DOMContentLoaded', () => {
     const scroller = {
         init() {
             this.scrollers = document.querySelectorAll('.home-scroller__line');
-            this.baseSpeed = 0.2;    // 稍微降低基础速度
-            this.maxSpeed = 0.5;     // 降低最大速度
-            this.acceleration = 0.2;  // 相应调整加速度
+            this.baseSpeed = 0.2;
+            this.maxSpeed = 0.5;
+            this.acceleration = 0.2;
             this.direction = -1;
             this.isScrolling = true;
             this.velocity = this.baseSpeed * this.direction;
-            this.lastWheelTime = 0;
-            
-            // 阻止页面滚动
-            document.body.style.overflow = 'hidden';
-            document.addEventListener('wheel', (e) => {
-                // 只在没有展开内容时阻止滚动
-                if (!document.querySelector('.dc__main__container[aria-expanded="true"]')) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
+            this.lastTouchY = null;
+            this.touchVelocity = 0;
+            this.touchStartTime = 0;
             
             if (this.scrollers.length) {
                 this.setupScroll();
                 this.handleContentState();
                 this.handleWheelDirection();
+                this.setupTouchEvents();  // 添加触摸事件处理
             }
+        },
+
+        setupTouchEvents() {
+            document.addEventListener('touchstart', (e) => {
+                if (document.querySelector('.dc__main__container[aria-expanded="true"]')) {
+                    return; // 如果有展开内容，不处理触摸
+                }
+                this.lastTouchY = e.touches[0].clientY;
+                this.touchStartTime = Date.now();
+                this.touchVelocity = 0;
+            }, { passive: true });
+
+            document.addEventListener('touchmove', (e) => {
+                if (!this.lastTouchY || document.querySelector('.dc__main__container[aria-expanded="true"]')) {
+                    return;
+                }
+
+                const currentY = e.touches[0].clientY;
+                const deltaY = currentY - this.lastTouchY;
+                const timeDelta = Date.now() - this.touchStartTime;
+                
+                // 计算速度和方向
+                this.touchVelocity = deltaY / timeDelta;
+                const newDirection = deltaY > 0 ? 1 : -1;
+
+                // 如果方向改变，重置速度
+                if (newDirection !== this.direction) {
+                    this.velocity = this.baseSpeed * newDirection;
+                }
+                
+                this.direction = newDirection;
+                
+                // 根据滑动速度调整滚动速度
+                const speed = Math.min(
+                    Math.max(Math.abs(this.touchVelocity * 50), this.baseSpeed),
+                    this.maxSpeed
+                );
+                this.velocity = speed * this.direction;
+
+                this.lastTouchY = currentY;
+                this.touchStartTime = Date.now();
+            }, { passive: true });
+
+            document.addEventListener('touchend', () => {
+                // 逐渐恢复到基础速度
+                const slowDown = () => {
+                    if (!this.isScrolling) return;
+
+                    const targetSpeed = this.baseSpeed * this.direction;
+                    const diff = targetSpeed - this.velocity;
+                    
+                    if (Math.abs(diff) < 0.01) {
+                        this.velocity = targetSpeed;
+                    } else {
+                        this.velocity += diff * 0.1;
+                        requestAnimationFrame(slowDown);
+                    }
+                };
+
+                slowDown();
+                this.lastTouchY = null;
+            }, { passive: true });
         },
 
         setupScroll() {
