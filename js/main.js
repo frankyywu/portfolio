@@ -1,4 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 添加视口高度调整函数
+    const setVH = () => {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    // 初始设置
+    setVH();
+
+    // 监听窗口大小变化和设备方向变化
+    window.addEventListener('resize', setVH);
+    window.addEventListener('orientationchange', () => {
+        // 等待方向变化完成后再调整
+        setTimeout(setVH, 100);
+    });
+
     // 自定义光标
     const cursor = {
         init() {
