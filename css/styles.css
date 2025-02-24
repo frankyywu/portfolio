@@ -568,30 +568,12 @@ body {
 }
 
 .work-item {
-    opacity: 0;
-    transform: translateY(40px);
-    animation: slideUp 0.8s var(--ease-out-expo) forwards;
-    animation-delay: calc(var(--index, 0) * 0.1s + 0.2s);
+    padding: 30px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.work-item__image {
-    margin-bottom: 20px;
-    overflow: hidden;
-}
-
-.work-item__image img {
-    width: 100%;
-    height: auto;
-    transform: scale(1.1);
-    transition: transform 1.2s var(--ease-out-expo);
-}
-
-.work-item:hover .work-item__image img {
-    transform: scale(1);
-}
-
-.work-item__content {
-    padding: 20px 0;
+.work-item:last-child {
+    border-bottom: none;
 }
 
 .work-item__title {
@@ -600,17 +582,63 @@ body {
     font-weight: normal;
 }
 
-.work-item__description {
-    font-size: 16px;
+.work-item__meta {
+    font-size: 14px;
     color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     margin-bottom: 15px;
 }
 
-.work-item__meta {
+.work-item__lab {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.work-item__link {
+    color: var(--color-text);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.work-item__link:hover {
+    opacity: 1;
+}
+
+.work-item__affiliation {
     font-size: 14px;
-    color: #999;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    color: #666;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.work-item__description {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.work-item__description p {
+    margin-bottom: 15px;
+}
+
+.work-item__achievements {
+    list-style-type: none;
+    padding-left: 20px;
+    margin: 15px 0;
+}
+
+.work-item__achievements li {
+    position: relative;
+    margin-bottom: 10px;
+    padding-left: 15px;
+}
+
+.work-item__achievements li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #666;
 }
 
 /* 响应式调整 */
@@ -623,6 +651,14 @@ body {
 @media (max-width: 768px) {
     .work-grid {
         gap: 60px;
+    }
+
+    .work-item {
+        padding: 20px 0;
+    }
+
+    .work-item__title {
+        font-size: 20px;
     }
 }
 
