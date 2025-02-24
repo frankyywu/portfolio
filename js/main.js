@@ -1,20 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 添加视口高度调整函数
-    const setVH = () => {
-        const vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-    };
-
-    // 初始设置
-    setVH();
-
-    // 监听窗口大小变化和设备方向变化
-    window.addEventListener('resize', setVH);
-    window.addEventListener('orientationchange', () => {
-        // 等待方向变化完成后再调整
-        setTimeout(setVH, 100);
-    });
-
     // 自定义光标
     const cursor = {
         init() {
@@ -251,15 +235,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }, { passive: false });
             
-            // 添加触摸事件支持
-            this.touchStartY = 0;
-            this.touchStartTime = 0;
-            this.isTouching = false;
-            
-            document.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false });
-            document.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
-            document.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: false });
-
             if (this.scrollers.length) {
                 this.setupScroll();
                 this.handleContentState();
@@ -358,62 +333,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 subtree: true,
                 attributeFilter: ['aria-expanded']
             });
-        },
-
-        handleTouchStart(e) {
-            if (document.querySelector('.dc__main__container[aria-expanded="true"]')) {
-                return; // 如果有展开内容，不处理触摸
-            }
-            this.touchStartY = e.touches[0].clientY;
-            this.touchStartTime = Date.now();
-            this.isTouching = true;
-            this.lastTouchY = this.touchStartY;
-            e.preventDefault();
-        },
-
-        handleTouchMove(e) {
-            if (!this.isTouching || document.querySelector('.dc__main__container[aria-expanded="true"]')) {
-                return;
-            }
-
-            const currentY = e.touches[0].clientY;
-            const deltaY = currentY - this.lastTouchY;
-            this.lastTouchY = currentY;
-
-            // 根据滑动方向和速度调整滚动
-            const newDirection = deltaY > 0 ? 1 : -1;
-            
-            // 如果方向改变，重置速度
-            if (newDirection !== this.direction) {
-                this.velocity = this.baseSpeed * newDirection;
-            }
-            
-            this.direction = newDirection;
-            
-            // 根据滑动速度调整滚动速度
-            const speed = Math.abs(deltaY) * 0.1; // 调整系数以获得合适的响应
-            this.velocity = Math.min(Math.max(Math.abs(this.velocity) + speed, this.baseSpeed), this.maxSpeed) * this.direction;
-
-            e.preventDefault();
-        },
-
-        handleTouchEnd(e) {
-            if (!this.isTouching) return;
-            
-            this.isTouching = false;
-            const touchEndY = e.changedTouches[0].clientY;
-            const deltaY = touchEndY - this.touchStartY;
-            const deltaTime = Date.now() - this.touchStartTime;
-            
-            // 计算滑动速度
-            const velocity = Math.abs(deltaY / deltaTime);
-            
-            // 根据滑动速度设置惯性
-            if (velocity > 0.5) { // 调整阈值以获得合适的响应
-                this.velocity = Math.min(velocity * 2, this.maxSpeed) * (deltaY > 0 ? 1 : -1);
-            }
-
-            e.preventDefault();
         }
     };
 
